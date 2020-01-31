@@ -1,0 +1,40 @@
+version: '3.3'
+services:
+  swagger-api:
+    image: danielgtaylor/apisprout
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./swagger/api.yaml:/swagger/api.yaml
+    command: /swagger/api.yaml
+    networks:
+      swagger_network:
+        aliases:
+          - local.swagger.apisprout
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - '8081:8080'
+    volumes:
+      - ./swagger/api.yaml:/swagger/api.yaml
+    environment:
+      SWAGGER_JSON: /swagger/api.yaml
+
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    ports:
+      - '8082:8080'
+
+  swagger-nginx:
+    image: nginx:mainline-alpine
+    ports:
+      - '8083:8083'
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      swagger_network:
+
+networks:
+  swagger_network:
+    external: true
