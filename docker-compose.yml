@@ -1,5 +1,11 @@
 version: '3.3'
 services:
+  openapi-generator:
+    image: openapitools/openapi-generator-cli
+    volumes:
+      - ./swagger/api.yaml:/swagger/api.yaml
+      - ./api-skeleton/:/app
+
   swagger-api:
     image: danielgtaylor/apisprout
     ports:
